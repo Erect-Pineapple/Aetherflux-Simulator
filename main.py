@@ -29,7 +29,7 @@ p = whole_number_input("How many enemies? ")
 enemies = {}
 for x in range(p):
   name = input("Enemy Name: ")
-  enemies[name] = int(input("Life total:"))
+  enemies[name] = int(input(name + "'s life total:"))
 
 
 
