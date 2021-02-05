@@ -29,7 +29,7 @@ p = whole_number_input("How many enemies? ")
 enemies = {}
 for x in range(p):
   name = input("Enemy Name: ")
-  enemies[name] = int(input(name + "'s life total:"))
+  enemies[name] = whole_number_input(name + "'s life total:")
 
 
 
@@ -47,7 +47,10 @@ def fishbowl(starting_life, spells_cast, previous_spells = 0, bowls = 1):
     life = starting_life
     for count in range(1, spells_cast + 1):
         life +=  bowls * (count + previous_spells)
-        print(life)
+        if count != 1:
+          print(life, "life after", count, "spells cast.")
+        else:
+          print(life, "life after", count, "spell cast.")
     print("From", starting_life, "starting life, you went to", life, "life after casting", spells_cast, "spells!")
     return life
 
@@ -70,7 +73,7 @@ def lasers(life, enemies):
             elif life > 50:
                 life -= 50
                 enemies[x] -= 50
-                print("shot at", x, life, "life remaining")   
+                print("Shot at", x, life, "life remaining")   
                 print(enemies)             
                 if enemies[x] < 1:
                     del(enemies[x])
@@ -78,7 +81,7 @@ def lasers(life, enemies):
                     if len(enemies) != 0:
                         print(enemies)
         if len(forenemies) == 0:
-            print("all enemies are dead, with", life, "life remaining")
+            print("All enemies are dead, with", life, "life remaining")
             break
         if life <= 50:
             print("Laser out of power.", life, "life remaining")
