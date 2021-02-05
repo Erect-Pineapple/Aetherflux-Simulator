@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Updatd on Sun Feb 04 2021
+Updated on Sun Feb 04 2021
 
 @author: Paul
 """
