@@ -1,17 +1,36 @@
 # -*- coding: utf-8 -*-
 """
-Created on Sun Jan 31 00:34:33 2021
+Updatd on Sun Feb 04 2021
 
 @author: Paul
 """
-    
-starting_life = int(input("What is your current life total? "))
-spells_cast = int(input("How many spells can you cast? "))
-p = int(input("How many enemies?"))
+def whole_number_input(prompt):
+    while True:
+        try:
+            value = int(input(prompt))
+            # break can also be here instead of else
+        except ValueError:
+            print("Please enter a whole number.")
+        else:
+            break
+    return value
+
+
+starting_life = whole_number_input("What is your current life total? ")
+while True:
+    try:
+        spells_cast = whole_number_input("How many spells can you cast? ")
+        assert spells_cast > -1, "Cannot cast negative number of spells."
+        break
+    except:
+        print("Cannot cast negative number of spells.")
+
+p = whole_number_input("How many enemies? ")
 enemies = {}
 for x in range(p):
   name = input("Enemy Name: ")
   enemies[name] = int(input("Life total:"))
+
 
 
     
@@ -24,7 +43,7 @@ def fishbowl(starting_life, spells_cast, previous_spells = 0, bowls = 1):
     previous_spells: int, spells cast beforehand
     bowls:int, number of Aetherflux Reservoirs controlled before casting.   
     """
-  
+    assert spells_cast > -1, "Cannot cast a negative number of spells."
     life = starting_life
     for count in range(1, spells_cast + 1):
         life +=  bowls * (count + previous_spells)
