@@ -15,28 +15,23 @@ def whole_number_input(prompt):
             break
     return value
 
+def flux(spells,life=0,prev_spells=0,bowls=1):
+    """
+    Recursive function for Aetherflux calculation.
+    Returns life after casting X spells.
+    spells: positive integer
+    """
+    assert spells > -1 ,'Cannot cast negative spells'
+    if spells == 0:
+        return life
+    else:
+        newlife = life + ((spells + flux(spells-1) + prev_spells*spells)*bowls)
+        return newlife
 
-starting_life = whole_number_input("What is your current life total? ")
-while True:
-    try:
-        spells_cast = whole_number_input("How many spells can you cast? ")
-        assert spells_cast > -1, "Cannot cast negative number of spells."
-        break
-    except:
-        print("Cannot cast negative number of spells.")
-
-p = whole_number_input("How many enemies? ")
-enemies = {}
-for x in range(p):
-  name = input("Enemy Name: ")
-  enemies[name] = whole_number_input(name + "'s life total:")
-
-
-
-    
+# iterative version of flux.  Not used currently.
 def fishbowl(starting_life, spells_cast, previous_spells = 0, bowls = 1):
     """
-    Returns updated life total after casting spells and gaining life from 
+    Returns to updated life total after casting spells and gaining life from 
     Aetherflux Reservoir after casting spells_cast spells.
     starting_life: int, how much life you have before casting spells
     spells_cast: int, how many spells you can cast this turn
@@ -47,14 +42,7 @@ def fishbowl(starting_life, spells_cast, previous_spells = 0, bowls = 1):
     life = starting_life
     for count in range(1, spells_cast + 1):
         life +=  bowls * (count + previous_spells)
-        if count != 1:
-          print(life, "life after", count, "spells cast.")
-        else:
-          print(life, "life after", count, "spell cast.")
-    print("From", starting_life, "starting life, you went to", life, "life after casting", spells_cast, "spells!")
     return life
-
-
 
 
 def lasers(life, enemies):
@@ -73,19 +61,55 @@ def lasers(life, enemies):
             elif life > 50:
                 life -= 50
                 enemies[x] -= 50
-                print("Shot at", x, life, "life remaining")   
+                print("shot at", x, life, "life remaining")
                 print(enemies)             
                 if enemies[x] < 1:
                     del(enemies[x])
                     print(x,"is dead")
                     if len(enemies) != 0:
                         print(enemies)
-        if len(forenemies) == 0:
-            print("All enemies are dead, with", life, "life remaining")
-            break
+                    else:
+                        print("All enemies are dead, with", life, "life remaining")
+                        break
         if life <= 50:
             print("Laser out of power.", life, "life remaining")
             break
+        elif len(enemies) <= 0:
+            break
+    return life
                 
 
-lasers(fishbowl(starting_life, spells_cast), enemies)
+p = whole_number_input("How many enemies? ")
+enemies = {}
+for x in range(1, p+1):
+  name = input("Enemy Name " + str(x) + ": ")
+  enemies[name] = whole_number_input(name + "'s life total:")
+life = int(input("What life are you at? "))
+prev_spells = 0
+bowls = 1
+while True:
+    userinput = input('''Enter a number to cast that many spells (1 default), shoot to shoot your LAZOR, bowl to add a bowl,
+or eot to end your turn. ''')
+    if userinput == "eot":
+        prev_spells = 0
+        print("Previous spells reset to 0")
+    elif userinput == 'shoot':
+        life = lasers(life,enemies)
+        if len(enemies) <= 0:
+            break
+    elif userinput == 'exit':
+        break
+    elif userinput == 'bowl':
+        bowls += 1
+        print("Added another Aetherflux. ", bowls, "total.")
+    else:
+        try:
+            userinput = int(userinput)
+        except:
+            life = flux(1,life,prev_spells,bowls)
+            prev_spells += 1
+            print("Your new life is", life, "with", prev_spells,"spells cast.")
+        else:
+            life = flux(userinput,life,prev_spells,bowls)
+            prev_spells += userinput
+            print("Your new life is", life, "with", prev_spells,"spells cast.")
